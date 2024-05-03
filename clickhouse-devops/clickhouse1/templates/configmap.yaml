@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: { { .Values.configmap.name } }
+  namespace: { { .Values.namespace } }
+data:
+  CUSTOM_HEADER: { { .Values.configmap.data.CUSTOM_HEADER } }
+  HOT_DATA_SIZE: { { .Values.configmap.data.HOT_DATA_SIZE } }
+  COLD_DATA_SIZE: { { .Values.configmap.data.COLD_DATA_SIZE } }
+  MOVE_FACTOR: { { .Values.configmap.data.MOVE_FACTOR } }
+  clickhouse-init.sql: |-
+    CREATE TABLE dz_test
+    (
+        `B` Int64,
+        `T` String,
+        `D` Date
+    )
+    ENGINE = MergeTree
+    PARTITION BY D
+    ORDER BY B;
+
+    -- Insert data
+    INSERT INTO dz_test SELECT number, number, '2023-01-01' FROM numbers(1e9);

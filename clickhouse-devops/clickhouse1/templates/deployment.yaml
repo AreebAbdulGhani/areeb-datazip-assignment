@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: { { .Values.clickhouse } }
+  namespace: { { .Values.namespace } }
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: { { .Values.clickhouse } }
+  template:
+    metadata:
+      labels:
+        app: { { .Values.clickhouse } }
+    spec:
+      containers:
+        - name: mycontainer
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: { { .Values.configmap.name } }
+          env:
+            - name: HOT_DATA_SIZE
+              value: "{{ .Values.configmap.data.HOT_DATA_SIZE }}"
+            - name: COLD_DATA_SIZE
+              value: "{{ .Values.configmap.data.COLD_DATA_SIZE }}"
+            - name: MOVE_FACTOR
+              value: "{{ .Values.configmap.data.MOVE_FACTOR }}"
