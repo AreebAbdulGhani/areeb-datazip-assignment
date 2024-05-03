@@ -5,7 +5,7 @@ namespace: default
 configmap:
   name: helmappconfigmapv1.1
   data:
-    CUSTOM_HEADER: "ClickHouse was deployed with helm"
+  
     HOT_DATA_SIZE: "5GB"
     COLD_DATA_SIZE: "10GB"
     MOVE_FACTOR: "0.2"
